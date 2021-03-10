@@ -15,10 +15,10 @@ import { connect } from 'react-redux';
 import { addTodo, deleteTodo } from '../redux/actions';
 
 // Test Data
-const data = [
-  {id: 1, task: "Do this stuff"},
-  {id: 2, task: "Do another stuff"},
-]
+// const data = [
+//   {id: 1, task: "Do this stuff"},
+//   {id: 2, task: "Do another stuff"},
+// ]
 
 const TodoApp = ({ todo_list_1, addTodo, deleteTodo }) => {
   const [task, setTask] = React.useState('');
