@@ -20,65 +20,77 @@ import { addTodo, deleteTodo } from '../redux/actions';
 //   {id: 2, task: "Do another stuff"},
 // ]
 
-const TodoApp = ({ todo_list_1, addTodo, deleteTodo }) => {
-  const [task, setTask] = React.useState('');
-
-  const handleAddTodo = () => {
-    addTodo(task)
-    setTask('')
+class TodoApp extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      task: ''
+    }
   }
 
-  const handleDeleteTodo = (id) => {
+
+  handleAddTodo = () => {
+    addTodo(this.state.task);
+    this.setState({task:''})
+  }
+
+  handleDeleteTodo = (id) => {
     deleteTodo(id)
   }
 
-  return (
-    <View style={styles.container}>
-      <Card title="Card Title">
-        <Text style={styles.paragraph}>ToDo App with React Native and Redux</Text>
-      </Card>
-      <Spacer />
-      <Card>
-        <Card.Content>
-          <Title>Add ToDo Here</Title>
-          
-          <TextInput
-            mode="outlined"
-            label="Task"
-            value={task}
-            onChangeText={task => setTask(task)}
-          />
-          <Spacer/>
-          <Button mode="contained" onPress={handleAddTodo}>
-            Add Task
-          </Button>
-        </Card.Content>
-      </Card>
-      <Spacer />
-      <FlatList
-        data={todo_list_1}
-        keyExtractor={(item) => item.id}
-        renderItem={({item, index}) => {
-          return (
-            <>
-            <Card>
-              <Card.Title
-                title={`Task#${item.id}`}
-                // left={(props) => <Icon name="tasks" size={24} color="black" />}
-                right={(props) => <ButtonIcon iconName="close" color="red" onPress={() => handleDeleteTodo(item.id)} />}
-              />
-              <Card.Content>
-                <Paragraph>{item.task}</Paragraph>
-              </Card.Content>
-            </Card>
-            <Spacer />
-            </>
-          );
-        }}
-      />
-      <Spacer />
-    </View>
-  );
+  render() {
+    const {todo_list_1} = this.props
+    
+    return (
+      <View style={styles.container}>
+        <Card title="Card Title">
+          <Text style={styles.paragraph}>ToDo App with React Native and Redux</Text>
+        </Card>
+        <Spacer />
+        <Card>
+          <Card.Content>
+            <Title>Add ToDo Here</Title>
+            
+            <TextInput
+              mode="outlined"
+              label="Task"
+              value={this.state.task}
+              onChangeText={task => this.setState({task:task})}
+            />
+            <Spacer/>
+            <Button mode="contained" onPress={this.handleAddTodo}>
+              Add Task
+            </Button>
+          </Card.Content>
+        </Card>
+        <Spacer />
+        <FlatList
+          data={todo_list_1}
+          keyExtractor={(item) => item.id}
+          renderItem={({item, index}) => {
+            return (
+              <>
+              <Card>
+                <Card.Title
+                  title={`Task#${item.id}`}
+                  // left={(props) => <Icon name="tasks" size={24} color="black" />}
+                  right={(props) => <ButtonIcon iconName="close" color="red" onPress={() => handleDeleteTodo(item.id)} />}
+                />
+                <Card.Content>
+                  <Paragraph>{item.task}</Paragraph>
+                </Card.Content>
+              </Card>
+              <Spacer />
+              </>
+            );
+          }}
+        />
+        <Spacer />
+      </View>
+    );
+  }
+  
+  
 }
 
 const styles = StyleSheet.create({
