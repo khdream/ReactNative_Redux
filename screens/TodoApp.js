@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 // import Constants from 'expo-constants';
 
 // You can import from local files
@@ -7,12 +7,14 @@ import Spacer from '../components/Spacer';
 import ButtonIcon from '../components/ButtonIcon';
 
 // or any pure javascript modules available in npm
-import { Title, Paragraph, Card, Button, TextInput } from 'react-native-paper';
+import {Title, Paragraph, Card, Button, TextInput} from 'react-native-paper';
 // import { FontAwesome as Icon } from '@expo/vector-icons';
 
 // Import Redux and React Redux Dependencies
-import { connect } from 'react-redux';
-import { addTodo, deleteTodo } from '../redux/actions';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+// import {addTodo, deleteTodo} from '../redux/actions';
+import * as operatorActionTodo from '../redux/actions';
 
 // Test Data
 // const data = [
@@ -22,42 +24,46 @@ import { addTodo, deleteTodo } from '../redux/actions';
 
 class TodoApp extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      task: ''
-    }
+      // todo_list_1: this.props.todo_list_1,
+      task: '',
+    };
   }
-
 
   handleAddTodo = () => {
-    addTodo(this.state.task);
-    this.setState({task:''})
-  }
+    let {actions} = this.props;
+    actions.addTodo(this.state.task);
+    this.setState({task: ''});
+  };
 
   handleDeleteTodo = (id) => {
-    deleteTodo(id)
-  }
+    deleteTodo(id);
+  };
 
   render() {
-    const {todo_list_1} = this.props
-    
+    const {todo_list_1} = this.props;
+
     return (
       <View style={styles.container}>
         <Card title="Card Title">
-          <Text style={styles.paragraph}>ToDo App with React Native and Redux</Text>
+          <Text style={styles.paragraph}>
+            ToDo App with React Native and Redux
+          </Text>
         </Card>
         <Spacer />
+       
         <Card>
           <Card.Content>
             <Title>Add ToDo Here</Title>
-            
+
             <TextInput
               mode="outlined"
               label="Task"
               value={this.state.task}
-              onChangeText={task => this.setState({task:task})}
+              onChangeText={(task) => this.setState({task: task})}
             />
-            <Spacer/>
+            <Spacer />
             <Button mode="contained" onPress={this.handleAddTodo}>
               Add Task
             </Button>
@@ -70,17 +76,23 @@ class TodoApp extends React.Component {
           renderItem={({item, index}) => {
             return (
               <>
-              <Card>
-                <Card.Title
-                  title={`Task#${item.id}`}
-                  // left={(props) => <Icon name="tasks" size={24} color="black" />}
-                  right={(props) => <ButtonIcon iconName="close" color="red" onPress={() => handleDeleteTodo(item.id)} />}
-                />
-                <Card.Content>
-                  <Paragraph>{item.task}</Paragraph>
-                </Card.Content>
-              </Card>
-              <Spacer />
+                <Card>
+                  <Card.Title
+                    title={`Task#${item.id}`}
+                    // left={(props) => <Icon name="tasks" size={24} color="black" />}
+                    right={(props) => (
+                      <ButtonIcon
+                        iconName="close"
+                        color="red"
+                        onPress={() => handleDeleteTodo(item.id)}
+                      />
+                    )}
+                  />
+                  <Card.Content>
+                    <Paragraph>{item.task}</Paragraph>
+                  </Card.Content>
+                </Card>
+                <Spacer />
               </>
             );
           }}
@@ -89,8 +101,6 @@ class TodoApp extends React.Component {
       </View>
     );
   }
-  
-  
 }
 
 const styles = StyleSheet.create({
@@ -111,12 +121,13 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state, ownProps) => {
   return {
     todo_list_1: state.todos_1.todo_list_2,
-  }
-}
+  };
+};
 
-const mapDispatchToProps = { addTodo, deleteTodo }
+const ActionCreators = Object.assign({}, operatorActionTodo);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoApp)
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);

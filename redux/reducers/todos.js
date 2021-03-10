@@ -1,7 +1,10 @@
 import { ADD_TODO, DELETE_TODO } from "../actionTypes";
 
 const initialState = {
-  todo_list_2: []
+  todo_list_2: [
+    {id: 1, task: "Do this stuff"},
+    {id: 2, task: "Do another stuff"},
+  ]
 };
 
 export default function(state = initialState, action) {
