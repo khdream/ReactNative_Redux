@@ -13,8 +13,7 @@ import {Title, Paragraph, Card, Button, TextInput} from 'react-native-paper';
 // Import Redux and React Redux Dependencies
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-// import {addTodo, deleteTodo} from '../redux/actions';
-import * as operatorActionTodo from '../redux/actions';
+import {addTodo, deleteTodo} from '../redux/actions';
 
 // Test Data
 // const data = [
@@ -32,13 +31,15 @@ class TodoApp extends React.Component {
   }
 
   handleAddTodo = () => {
-    let {actions} = this.props;
-    actions.addTodo(this.state.task);
+    let { add } = this.props;
+    add(this.state.task);
     this.setState({task: ''});
   };
 
   handleDeleteTodo = (id) => {
-    deleteTodo(id);
+    let { delete_a } = this.props;
+
+    delete_a(id);
   };
 
   render() {
@@ -52,7 +53,7 @@ class TodoApp extends React.Component {
           </Text>
         </Card>
         <Spacer />
-       
+
         <Card>
           <Card.Content>
             <Title>Add ToDo Here</Title>
@@ -84,7 +85,7 @@ class TodoApp extends React.Component {
                       <ButtonIcon
                         iconName="close"
                         color="red"
-                        onPress={() => handleDeleteTodo(item.id)}
+                        onPress={() => this.handleDeleteTodo(item.id)}
                       />
                     )}
                   />
@@ -124,10 +125,14 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const ActionCreators = Object.assign({}, operatorActionTodo);
-
-const mapDispatchToProps = (dispatch) => ({
-    actions: bindActionCreators(ActionCreators, dispatch),
-});
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    add: (task) => {
+      dispatch(addTodo(task));
+    },
+    delete_a: (id) => {
+      dispatch(deleteTodo(id));
+    },
+  };
+};
 export default connect(mapStateToProps, mapDispatchToProps)(TodoApp);
