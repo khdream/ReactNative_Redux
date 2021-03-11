@@ -12,7 +12,6 @@ import {Title, Paragraph, Card, Button, TextInput} from 'react-native-paper';
 
 // Import Redux and React Redux Dependencies
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import {addTodo, deleteTodo} from '../redux/actions';
 
 // Test Data
